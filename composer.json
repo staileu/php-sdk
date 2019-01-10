@@ -1,0 +1,25 @@
+{
+  "name": "staileu/php",
+  "description": "The php sdk to use staileu services",
+  "type": "library",
+  "homepage": "https://stail.eu",
+  "require": {
+    "guzzlehttp/guzzle": "^6.3",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.5"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "STAN-TAb Corp.",
+      "email": "contact@stantabcorp.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "STAILEUAccounts\\": "src/"
+    }
+  }
+}
