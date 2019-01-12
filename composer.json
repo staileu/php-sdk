@@ -1,5 +1,5 @@
 {
-  "name": "staileu/php",
+  "name": "staileu/php-sdk",
   "description": "The php sdk to use staileu services",
   "type": "library",
   "homepage": "https://stail.eu",
