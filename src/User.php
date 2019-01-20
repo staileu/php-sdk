@@ -55,4 +55,14 @@ class User {
      * @var string
      */
     public $avatarUrl = NULL;
+
+    public function getBase64Avatar($dataUri = false): string
+    {
+        if ($this->avatarUrl !== NULL) {
+            $base64 = base64_encode(file_get_contents($this->avatarUrl));
+            return $dataUri ? 'data:image/jpeg;base64,' . $base64 : $base64;
+        } else {
+            return NULL;
+        }
+    }
 }
