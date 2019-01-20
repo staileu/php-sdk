@@ -4,7 +4,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase {
 
     public function buildClient(): \STAILEUAccounts\Client
     {
-        return new \STAILEUAccounts\Client("ZIR7blbDfmFjavbl", "96YtRbuJrSKCtdQbkEQfR8WZSOHdRlrk");
+        return new \STAILEUAccounts\Client("XXX", "XXX");
     }
 
     public function testAuthorizeUrl()
@@ -25,12 +25,14 @@ class ClientTest extends \PHPUnit\Framework\TestCase {
 
     public function testVerifyAndFetchUser()
     {
-        $code = "IL4OFt0R7jP3C8RCJus38pNpRvzXDFz5HRAH2TsjxKFME4Zau0Zn9WMnxXbaHwWr";
+        $code = "XXX";
         $client = $this->buildClient();
         $isValid = $client->verify($code);
         $this->assertNotNull($isValid);
         $this->assertTrue($isValid);
+        $this->assertEquals(200, $client->getLastApiResponse()->getStatusCode());
         $client->fetchUser();
+        $this->assertEquals(200, $client->getLastApiResponse()->getStatusCode());
         echo $client->getAccessToken() . " \n";
         echo $client->getUser()->id . " \n";
         echo $client->getUser()->username . " \n";

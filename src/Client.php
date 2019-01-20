@@ -2,6 +2,8 @@
 
 namespace STAILEUAccounts;
 
+use GuzzleHttp\Psr7\Response;
+
 /**
  * The main class of the sdk
  *
@@ -38,6 +40,11 @@ class Client {
     private $apiEndpoint = 'https://api-v2.stail.eu';
 
     private $accessToken = '';
+
+    /**
+     * @var Response
+     */
+    private $lastApiResponse = NULL;
 
     const SCOPE_READ_PROFILE = 'read-profile';
 
@@ -83,8 +90,14 @@ class Client {
                 'code' => $code
             ]
         ]);
+        $this->lastApiResponse = $response;
+        if ($response->getStatusCode() !== 200) {
+            return false;
+        }
+
         $body = json_decode($response->getBody()->getContents(), true);
-        if ($response->getStatusCode() !== 200 && $body['success'] !== true) {
+
+        if (!is_array($body) && !isset($body['success']) && $body['success'] !== true) {
             return false;
         }
         $this->accessToken = $body['data']['auth']['token'];
@@ -105,10 +118,15 @@ class Client {
                 'Authorization' => 'Bearer ' . $this->accessToken
             ]
         ]);
+        $this->lastApiResponse = $response;
+
+        if ($response->getStatusCode() !== 200) {
+            return false;
+        }
 
         $body = json_decode($response->getBody()->getContents(), true);
 
-        if ($response->getStatusCode() !== 200 && $body['success'] !== true) {
+        if (!is_array($body) && !isset($body['success']) && $body['success'] !== true) {
             return false;
         }
 
@@ -191,5 +209,15 @@ class Client {
     {
         $this->apiEndpoint = $apiEndpoint;
         return $this;
+    }
+
+    /**
+     * Get the last api response in guzzle http response interface
+     *
+     * @return Response|NULL
+     */
+    public function getLastApiResponse()
+    {
+        return $this->lastApiResponse;
     }
 }
