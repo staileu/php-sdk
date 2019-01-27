@@ -44,4 +44,23 @@ class ClientTest extends \PHPUnit\Framework\TestCase {
         echo $client->getUser()->getBase64Avatar() . "\n";
         echo $client->getUser()->getBase64Avatar(true) . "\n";
     }
+
+    public function testGetUserByIdOrUsername()
+    {
+        $userId = "XXX";
+        $username = "XXX";
+        $client = $this->buildClient();
+
+        $user = $client->getUserByIdOrUsername($userId);
+        $this->assertEquals(200, $client->getLastApiResponse()->getStatusCode());
+        $this->assertNotFalse($user);
+        $this->assertEquals($user->username, $username);
+        $this->assertEquals($user->id, $userId);
+
+        $user = $client->getUserByIdOrUsername($username);
+        $this->assertEquals(200, $client->getLastApiResponse()->getStatusCode());
+        $this->assertNotFalse($user);
+        $this->assertEquals($user->username, $username);
+        $this->assertEquals($user->id, $userId);
+    }
 }

@@ -13,7 +13,8 @@ use GuzzleHttp\Psr7\Response;
  * @author STAN-TAb Corp.
  * @see https://docs.stail.eu
  */
-class Client {
+class Client
+{
 
     /**
      * @var \GuzzleHttp\Client
@@ -138,9 +139,37 @@ class Client {
         $user->email = $userRow['email'];
         $user->firstName = $userRow['first_name'];
         $user->lastName = $userRow['last_name'];
-        $user->birthday = $userRow['birthday'];
+        $user->birthday = $userRow['birthday'] == NULL ? NULL : $userRow['birthday'];
         $user->avatarUrl = $this->apiEndpoint . '/avatar/' . $user->id;
         $this->user = $user;
+
+        return $user;
+    }
+
+    public function getUserByIdOrUsername(string $idOrUsername)
+    {
+        $response = $this->client->get($this->apiEndpoint . '/user/' . $idOrUsername, [
+            'headers' => [
+                'Authorization' => 'Bearer app-' . base64_encode($this->appId . ':' . $this->appSecret)
+            ]
+        ]);
+        $this->lastApiResponse = $response;
+
+        if ($response->getStatusCode() !== 200) {
+            return false;
+        }
+
+        $body = json_decode($response->getBody()->getContents(), true);
+
+        if (!is_array($body) && !isset($body['success']) && $body['success'] !== true) {
+            return false;
+        }
+        $userRow = $body['data']['user'];
+
+        $user = new User();
+        $user->id = $userRow['id'];
+        $user->username = $userRow['username'];
+        $user->avatarUrl = $this->apiEndpoint . '/avatar/' . $user->id;
 
         return $user;
     }
