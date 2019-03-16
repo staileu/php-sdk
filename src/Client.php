@@ -169,6 +169,10 @@ class Client
         $user = new User();
         $user->id = $userRow['id'];
         $user->username = $userRow['username'];
+        $user->email = $userRow['email'];
+        $user->firstName = $userRow['first_name'];
+        $user->lastName = $userRow['last_name'];
+        $user->birthday = $userRow['birthday'] == NULL ? NULL : $userRow['birthday'];
         $user->avatarUrl = $this->apiEndpoint . '/avatar/' . $user->id;
 
         return $user;
